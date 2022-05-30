@@ -33,5 +33,3 @@ def decryption(cipher,key):
         else:
             text=text+i
     return text
-
-#print(encryption("lorem","merol"))

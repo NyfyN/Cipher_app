@@ -1,10 +1,10 @@
-import atbash as at
-import baconian as bc
-import beaufort as bf
-import cezar as cz
-import polibiusz as pb
-import ZB as zb
-#import playfair as pf
+from src import atbash as at
+from src import baconian as bc
+from src import beaufort as bf
+from src import cezar as cz
+from src import polibiusz as pb
+from src import ZB as zb
+from src import transposition as tr
 
 from tkinter import *
 
@@ -16,6 +16,7 @@ class CryptGUI(object):
 		super(CryptGUI, self).__init__()
 		self.label_counter = 0
 		self.root = Tk()
+		self.root.title("Algorytmy kryptograficzne")
 		self.draw_main_window()
 		self.root.mainloop()
 
@@ -79,7 +80,11 @@ class CryptGUI(object):
 		self.zb_label = Label(self.zb_frame,text="Szyfr ZB",font=("Comic Sans",45)).pack(side=LEFT)
 		self.zb_button = Button(self.zb_frame,text="Kliknij...",font=("Comic Sans",35),
 			command=self.zb_window).pack(side=RIGHT)
-
+		##TRANSPOSITION CIPHER
+		self.tr_frame = Frame(self.root)
+		self.tr_label = Label(self.tr_frame,text="Szyfr kolumnowy",font=("Comic Sans",45)).pack(side=LEFT)
+		self.tr_button = Button(self.tr_frame,text="Kliknij...",font=("Comic Sans",35),
+			command=self.tr_window).pack(side=RIGHT)
 		##PACK PART
 		self.ceasar_frame.pack(fill=BOTH, expand=YES)
 		self.beaufort_frame.pack(fill=BOTH, expand=YES)
@@ -87,6 +92,7 @@ class CryptGUI(object):
 		self.polybius_frame.pack(fill=BOTH, expand=YES)
 		self.baconian_frame.pack(fill=BOTH, expand=YES)
 		self.zb_frame.pack(fill=BOTH, expand=YES)
+		self.tr_frame.pack(fill=BOTH, expand=YES)
 		self.help_btn.pack(anchor=SE)
 
 	def help_window(self):
@@ -96,14 +102,21 @@ class CryptGUI(object):
 		self.help_label = Label(self.help_frame,text="""
 Program testujący działanie opisanych szyfrów. 
 Kliknij przycisk, a następnie wypełnij opisane pola.
-			""",font=("Comic Sans",36))
+
+
+Jeżeli należy podać klucz, to  zawsze jest to liczba.
+Zdanie klucz, należy wpisać zdanie lub słowo.""",font=("Comic Sans",36))
+		self.copyright_label = Label(self.help_root,text="v.alpha-0.1 \u00A9 2022 Mateusz Dziedzic, All rights reserved.",
+			font=("Times New Roman",6))
 		self.title_help_label.pack()
 		self.help_frame.pack()
 		self.help_label.pack()
+		self.copyright_label.pack()
 		self.help_root.mainloop()
 
 	def ceasar_window(self):
 		self.ceasar_root = Tk()
+		self.ceasar_root.title("Szyfr Cezara")
 		ceasar_entry_label = Label(self.ceasar_root, text="Podaj zdanie ",font=("Comic Sans",20))
 		self.ceasar_entry = Entry(self.ceasar_root)
 		self.ceasar_key_entry = Entry(self.ceasar_root)
@@ -130,6 +143,7 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 
 	def beaufort_window(self):
 		self.beaufort_root = Tk()
+		self.beaufort_root.title("Szyfr Beaufort'a")
 		self.beaufort_entry_label = Label(self.beaufort_root, text="Podaj zdanie",font=("Comic Sans",20))
 		self.beaufort_entry = Entry(self.beaufort_root)
 		self.beaufort_pattern_label = Label(self.beaufort_root, text="Podaj zdanie-klucz",font=("Comic Sans",20))
@@ -157,6 +171,7 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 
 	def atbash_window(self):
 		self.atbash_root = Tk()
+		self.atbash_root.title("Szyfr AtBash")
 		self.atbash_entry_label = Label(self.atbash_root, text="Podaj zdanie do zaszyfrowania",font=("Comic Sans",20))
 		self.atbash_entry = Entry(self.atbash_root)
 		atbash_encryption_button = Button(self.atbash_root, text="Szyfruj!",font=("Comic Sans",20),command=self.atbash_encryption)
@@ -178,6 +193,7 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 
 	def polybius_window(self):
 		self.polybius_root = Tk()
+		self.polybius_root.title("Szyfr Polibiusza")
 		self.polybius_encrypt_enter_label = Label(self.polybius_root, text="Podaj zdanie do zaszyfrowania",font=("Comic Sans",20))
 		self.polybius_encrypt_entry = Entry(self.polybius_root)
 		polybius_encryption_button = Button(self.polybius_root, text="Szyfruj!",font=("Comic Sans",20)
@@ -216,6 +232,7 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 
 	def baconian_window(self):
 		self.baconian_root = Tk()
+		self.baconian_root.title("Szyfr bekonowy")
 		self.baconian_encrypt_enter_label = Label(self.baconian_root, text="Podaj zdanie do zaszyfrowania",font=("Comic Sans",20))
 		self.baconian_encrypt_entry = Entry(self.baconian_root)
 		baconian_encrypt_button = Button(self.baconian_root,text="Szyfruj",font=("Comic Sans",20),command=self.baconian_encrypt)
@@ -231,7 +248,6 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 		baconian_decrypt_button.pack()
 		self.baconian_text_box.pack()
 		self.baconian_root.mainloop()
-		#self.baconian_root.protocol("WM_DELETE_WINDOW",self.__baconian_on_closing__)
 
 	def baconian_encrypt(self):
 		self.baconian_text_box.delete(1.0,END)
@@ -253,6 +269,7 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 		
 	def zb_window(self):
 		self.zb_root = Tk()
+		self.zb_root.title("Szyfr Zietnik")
 		self.zb_encrypt_enter_label = Label(self.zb_root, text="Podaj zdanie do zaszyfrowania",font=("Comic Sans",20))
 		self.zb_encrypt_entry = Entry(self.zb_root)
 		self.zb_encrypt_enter_key_label = Label(self.zb_root, text="Podaj klucz",font=("Comic Sans",20))
@@ -296,5 +313,52 @@ Kliknij przycisk, a następnie wypełnij opisane pola.
 		self.zb_text_box.tag_configure("center",justify='center')
 		self.zb_text_box.insert(END,"Odszyfrowany tekst: "+convert_text)
 		self.zb_text_box.tag_add("center",1.0,"end")
+
+	def tr_window(self):
+		self.tr_root = Tk()
+		self.tr_root.title("Szyfr kolumnowy przestawieniowy")
+		self.tr_encrypt_enter_label = Label(self.tr_root, text="Podaj zdanie do zaszyfrowania",font=("Comic Sans",20))
+		self.tr_encrypt_entry = Entry(self.tr_root)
+		self.tr_encrypt_enter_key_label = Label(self.tr_root, text="Podaj klucz",font=("Comic Sans",20))
+		self.tr_encrypt_entry_key = Entry(self.tr_root)
+		tr_encrypt_button = Button(self.tr_root,text="Szyfruj",font=("Comic Sans",20),command=self.tr_encrypt)
+		self.tr_decrypt_enter_label = Label(self.tr_root, text="Podaj zdanie do odszyfrowania",font=("Comic Sans",20))
+		self.tr_decrypt_entry = Entry(self.tr_root)
+		self.tr_decrypt_enter_key_label = Label(self.tr_root, text="Podaj klucz",font=("Comic Sans",20))
+		self.tr_decrypt_entry_key = Entry(self.tr_root)
+		tr_decrypt_button = Button(self.tr_root,text="Deszyfruj",font=("Comic Sans",20),command=self.tr_decrypt)
+		self.tr_text_box = Text(self.tr_root,height=10,width=25,font=("Comic Sans",20))
+		self.tr_encrypt_enter_label.pack()
+		self.tr_encrypt_entry.pack()
+		self.tr_encrypt_enter_key_label.pack()
+		self.tr_encrypt_entry_key.pack()
+		tr_encrypt_button.pack()
+		self.tr_decrypt_enter_label.pack()
+		self.tr_decrypt_entry.pack()
+		self.tr_decrypt_enter_key_label.pack()
+		self.tr_decrypt_entry_key.pack()
+		tr_decrypt_button.pack()
+		self.tr_text_box.pack()
+		self.tr_root.mainloop()
+
+	def tr_encrypt(self):
+		self.tr_text_box.delete(1.0,END)
+		self.label_counter = 0
+		tr_text = self.tr_encrypt_entry.get()
+		tr_key = self.tr_encrypt_entry_key.get()
+		convert_text =tr.encryption(tr_text,int(tr_key))
+		self.tr_text_box.tag_configure("center",justify='center')
+		self.tr_text_box.insert(END,"Zaszyfrowany tekst: "+convert_text)
+		self.tr_text_box.tag_add("center",1.0,"end")
+
+	def tr_decrypt(self):
+		self.tr_text_box.delete(1.0,END)
+		self.label_counter = 0
+		tr_text = self.tr_decrypt_entry.get()
+		tr_key = self.tr_decrypt_entry_key.get()
+		convert_text =tr.decryption(tr_text,int(tr_key))
+		self.tr_text_box.tag_configure("center",justify='center')
+		self.tr_text_box.insert(END,"Odszyfrowany tekst: "+convert_text)
+		self.tr_text_box.tag_add("center",1.0,"end")
 
 start = CryptGUI()
